@@ -6,14 +6,14 @@ using System.Text;
 
 namespace Books.ApplicationCore.Entities.BookAggregate
 {
-    public class Tag : BaseEntity, IAggregateRoot
+    public class Author : BaseEntity, IAggregateRoot
     {
         [Required]
-        [StringLength(20)]
-        public string Name { get; set; }
+        [MaxLength(150)]
+        public string Firstname { get; set; }
+
         [Required]
-        [StringLength(100)]
-        public string Description { get; set; }
-        public ICollection<BookTag> BookTags { get; set; }
+        [MaxLength(150)]
+        public string Lastname { get; set; }
     }
 }

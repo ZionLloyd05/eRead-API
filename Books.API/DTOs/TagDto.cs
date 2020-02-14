@@ -1,12 +1,12 @@
-﻿using Books.ApplicationCore.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Books.ApplicationCore.Entities.BookAggregate
+namespace Books.API.Dtos
 {
-    public class Tag : BaseEntity, IAggregateRoot
+    public class TagDto
     {
         [Required]
         [StringLength(20)]
@@ -14,6 +14,5 @@ namespace Books.ApplicationCore.Entities.BookAggregate
         [Required]
         [StringLength(100)]
         public string Description { get; set; }
-        public ICollection<BookTag> BookTags { get; set; }
     }
 }

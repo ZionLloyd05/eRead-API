@@ -4,14 +4,16 @@ using Books.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Books.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(BooksContext))]
-    partial class BooksContextModelSnapshot : ModelSnapshot
+    [Migration("20200207113811_addedRoleToUser")]
+    partial class addedRoleToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,51 +38,25 @@ namespace Books.Infrastructure.Data.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("Books.ApplicationCore.Entities.BookAggregate.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Firstname")
-                        .IsRequired()
-                        .HasMaxLength(150);
-
-                    b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasMaxLength(150);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Author");
-                });
-
             modelBuilder.Entity("Books.ApplicationCore.Entities.BookAggregate.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AuthorId");
-
-                    b.Property<int>("CategoryId");
+                    b.Property<int?>("CategoryId");
 
                     b.Property<string>("CoverPicture");
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(2500);
+                    b.Property<string>("Description");
 
                     b.Property<bool>("IsVisible");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(150);
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
 
@@ -112,13 +88,9 @@ namespace Books.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<string>("Description");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Slug");
 
@@ -133,13 +105,9 @@ namespace Books.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<string>("Description");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -247,15 +215,9 @@ namespace Books.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Books.ApplicationCore.Entities.BookAggregate.Book", b =>
                 {
-                    b.HasOne("Books.ApplicationCore.Entities.BookAggregate.Author", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Books.ApplicationCore.Entities.BookAggregate.Category", "Category")
                         .WithMany("Books")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("Books.ApplicationCore.Entities.BookAggregate.BookTag", b =>

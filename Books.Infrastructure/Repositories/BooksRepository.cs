@@ -38,7 +38,7 @@ namespace Books.Infrastructure
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int? id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }

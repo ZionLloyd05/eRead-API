@@ -8,7 +8,7 @@ namespace Books.ApplicationCore.Interfaces
 {
     public interface IAsyncRepository<T> where T : class, IAggregateRoot
     {
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(int? id);
         Task<IReadOnlyList<T>> ListAllAsync();
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
         Task<T> AddAsync(T entity);

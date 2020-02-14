@@ -1,4 +1,5 @@
 using Books.API.Dtos;
+using Books.API.Utility;
 using Books.ApplicationCore.Entities.UserAggregate;
 using Books.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,8 @@ namespace Books.API.Controllers
             {
                 Firstname = userForRegisterDto.Firstname,
                 Lastname = userForRegisterDto.Lastname,
-                Email = userForRegisterDto.Email
+                Email = userForRegisterDto.Email,
+                Role = SD.ConsumerEndUser
             };
 
             await _authRepository.Register(userToCreate, userForRegisterDto.Password);
@@ -52,6 +54,7 @@ namespace Books.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
+
             if (!ModelState.IsValid)
                 return BadRequest();
 
@@ -62,10 +65,13 @@ namespace Books.API.Controllers
 
             // build up a token to return to the user => containing user id and email
 
+            var fullname = userFromRepo.Firstname + " " + userFromRepo.Lastname;
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Email, userFromRepo.Email)
+                new Claim(ClaimTypes.Email, userFromRepo.Email),
+                new Claim(ClaimTypes.Name, fullname),
+                new Claim(ClaimTypes.Role, userFromRepo.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8

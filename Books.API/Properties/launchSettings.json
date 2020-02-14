@@ -12,13 +12,15 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/tags",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Books.API": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:44398/api/tags",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -16,6 +16,6 @@ namespace Books.ApplicationCore.Entities.UserAggregate
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public Photo Photo { get; set; }
-
+        public string Role { get; set;}
     }
 }
