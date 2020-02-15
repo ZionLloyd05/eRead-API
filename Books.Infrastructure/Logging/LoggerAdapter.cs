@@ -6,11 +6,11 @@ using System.Text;
 
 namespace Books.Infrastructure.Logging
 {
-    public class LoggingAdapter<T> : IAppLogger<T>
+    public class LoggerAdapter<T> : IAppLogger<T>
     {
         private readonly ILogger<T> _logger;
 
-        public LoggingAdapter(ILoggerFactory loggerFactory)
+        public LoggerAdapter(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<T>();
         }

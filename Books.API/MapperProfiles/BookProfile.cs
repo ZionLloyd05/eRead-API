@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Books.API.Dtos;
+using Books.API.Dtos.Book;
+using Books.API.DTOs.Book;
 using Books.ApplicationCore.Entities.BookAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Books.API.MapperProfiles
 {
@@ -17,6 +14,7 @@ namespace Books.API.MapperProfiles
                     $"{src.Author.Firstname} {src.Author.Lastname}"
                 ));
 
+            CreateMap<BookForCreationDto, Book>();
         }
     }
 }

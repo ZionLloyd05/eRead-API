@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Books.API.Dtos
+namespace Books.API.DTOs.Tag
 {
-    public class CategoryDto
+    public class TagForCreationDto
     {
         [Required]
         [StringLength(20)]
@@ -14,6 +14,5 @@ namespace Books.API.Dtos
         [Required]
         [StringLength(100)]
         public string Description { get; set; }
-        public string Slug { get; set; }
     }
 }

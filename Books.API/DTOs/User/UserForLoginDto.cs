@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Books.API.Dtos
+namespace Books.API.Dtos.User
 {
     public class UserForLoginDto
     {

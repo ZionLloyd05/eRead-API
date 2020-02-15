@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Books.API.Dtos
+namespace Books.API.Dtos.Book
 {
     public class BookForReturnDto
     {   

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Books.API.Dtos.Book;
 using Books.ApplicationCore.Entities.BookAggregate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,19 @@ namespace Books.API.Filters
 {
     public class BookResultFilterAttribute : ResultFilterAttribute
     {
-        public override async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
+        //private readonly ILogger<BookResultFilterAttribute> _logger;
+
+        //public BookResultFilterAttribute(ILoggerFactory loggerFactory)
+        //{
+        //    _logger = loggerFactory.CreateLogger<BookResultFilterAttribute>();
+        //}
+
+        public override async Task OnResultExecutionAsync(
+            ResultExecutingContext context, ResultExecutionDelegate next
+            )
         {
             var resultFromAction = context.Result as ObjectResult;
+            
             if(resultFromAction?.Value == null 
                 || resultFromAction.StatusCode < 200
                 || resultFromAction.StatusCode >= 300
@@ -23,8 +35,7 @@ namespace Books.API.Filters
                 return;
             }
                        
-
-            resultFromAction.Value = Mapper.Map<Book>(resultFromAction.Value);
+            resultFromAction.Value = Mapper.Map<BookForReturnDto>(resultFromAction.Value);
 
             await next();
         }

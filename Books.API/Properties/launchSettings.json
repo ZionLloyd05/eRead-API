@@ -20,7 +20,7 @@
     "Books.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:44398/api/tags",
+      "launchUrl": "http://localhost:44398/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

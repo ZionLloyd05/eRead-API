@@ -43,6 +43,11 @@ namespace Books.Infrastructure
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByIdAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
+        }
+
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
             return await _dbContext.Set<T>().ToListAsync();

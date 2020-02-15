@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Books.API.Dtos.Book;
 using Books.ApplicationCore.Entities.BookAggregate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -22,9 +23,11 @@ namespace Books.API.Filters
                 await next();
                 return;
             }
-            
-            resultFromAction.Value = Mapper.Map<IEnumerable<Book>>(resultFromAction.Value);
+
+            resultFromAction.Value = Mapper.Map<IEnumerable<BookForReturnDto>>(resultFromAction.Value);
 
             await next();
         }
+    }
 }
+

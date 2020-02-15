@@ -1,4 +1,4 @@
-using Books.API.Dtos;
+using Books.API.Dtos.User;
 using Books.API.Utility;
 using Books.ApplicationCore.Entities.UserAggregate;
 using Books.ApplicationCore.Interfaces;

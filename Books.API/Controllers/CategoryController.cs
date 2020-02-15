@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Books.API.Dtos;
+﻿using System.Threading.Tasks;
+using AutoMapper;
+using Books.API.Dtos.Category;
+using Books.API.DTOs.Category;
 using Books.ApplicationCore.Entities.BookAggregate;
 using Books.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -11,15 +10,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Books.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/categories")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
         private readonly IAsyncRepository<Category> _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public CategoryController(IAsyncRepository<Category> categoryRepository)
+        public CategoryController(IAsyncRepository<Category> categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
     
         // GET: api/categories
@@ -34,8 +35,9 @@ namespace Books.API.Controllers
             return Ok(categories);
         }
 
-        // GET api/category/5
-        [HttpGet("{id}")]
+        // GET api/categories/5
+        [HttpGet]
+        [Route("{id}", Name = "GetCategory")]
         public async Task<IActionResult> GetCategory(int? id = 0)
         {
             if (id == 0 || id == null)
@@ -46,29 +48,29 @@ namespace Books.API.Controllers
             if (category == null)
                 return NotFound();
 
-            return Ok(category);
+            CategoryForReturnDto categoryForReturn = _mapper.Map<CategoryForReturnDto>(category);
+
+            return Ok(categoryForReturn);
         }
 
         // POST api/category
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CategoryDto categoryObj)
+        public async Task<IActionResult> Post([FromBody]CategoryForCreationDto category)
         {
+            Category categoryEntity = _mapper.Map<Category>(category);
+
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var category = new Category
-            {
-                Name = categoryObj.Name,
-                Description = categoryObj.Description
-            };
+            await _categoryRepository.AddAsync(categoryEntity);
 
-            var newCategory = await _categoryRepository.AddAsync(category);
-            return Ok(newCategory);
+            return CreatedAtRoute("GetCategory",
+                new { id = categoryEntity.Id }, categoryEntity);
         }
 
         // PUT api/category/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int? id, [FromBody] CategoryDto categoryFromUser)
+        public async Task<IActionResult> Update(int? id, [FromBody] CategoryForCreationDto categoryFromUser)
         {
             if (id == null || !ModelState.IsValid)
                 return BadRequest();
@@ -80,6 +82,7 @@ namespace Books.API.Controllers
 
             categoryInDb.Name = categoryFromUser.Name;
             categoryInDb.Description = categoryFromUser.Description;
+            categoryInDb.Slug = categoryFromUser.Slug;
 
             await _categoryRepository.UpdateAsync(categoryInDb);
 

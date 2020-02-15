@@ -9,6 +9,7 @@ using Books.API.Helpers;
 using Books.ApplicationCore.Interfaces;
 using Books.Infrastructure;
 using Books.Infrastructure.Data;
+using Books.Infrastructure.Logging;
 using Books.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,7 @@ namespace Books.API
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BooksRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
             services.AddAutoMapper();
 
@@ -67,6 +69,15 @@ namespace Books.API
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMemoryCache();
+
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc("LibraryOpenAPISpecification", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "eRead API",
+                    Version = "1.0"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,6 +110,13 @@ namespace Books.API
             }
 
             //app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction => 
+            {
+                setupAction.SwaggerEndpoint("/swagger/LibraryOpenAPISpecification/swagger.json",
+                    "eRead API");
+                setupAction.RoutePrefix = "";
+            });
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();

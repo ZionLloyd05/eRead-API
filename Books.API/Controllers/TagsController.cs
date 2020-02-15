@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Books.API.Dtos;
-using Books.ApplicationCore.Entities;
+using AutoMapper;
+using Books.API.Dtos.Tag;
+using Books.API.DTOs.Tag;
 using Books.ApplicationCore.Entities.BookAggregate;
 using Books.ApplicationCore.Interfaces;
-using Books.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Books.API.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/tags")]
     [ApiController]
-    public class TagController : ControllerBase
+    public class TagsController : ControllerBase
     {
         private readonly IAsyncRepository<Tag> _tagRepository;
+        private readonly IMapper _mapper;
 
-        public TagController(IAsyncRepository<Tag> tagRepository)
+        public TagsController(IAsyncRepository<Tag> tagRepository, IMapper mapper)
         {
             _tagRepository = tagRepository;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         // GET api/tags
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
@@ -34,11 +32,14 @@ namespace Books.API.Controllers
             if (tags == null || tags.Count == 0)
                 return NotFound();
 
-            return Ok(tags);
+            IReadOnlyList<TagForReturnDto> tagsForReturn = _mapper.Map<IReadOnlyList<TagForReturnDto>>(tags);
+
+            return Ok(tagsForReturn);
         }
 
         // GET api/tags/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}", Name = "GetTag")]
         public async Task<IActionResult> GetTag(int? id = 0)
         {
             if (id == 0 || id == null)
@@ -49,30 +50,29 @@ namespace Books.API.Controllers
             if (tag == null)
                 return NotFound();
 
-            return Ok(tag);
+            TagForReturnDto tagForReturn = _mapper.Map<TagForReturnDto>(tag);
+
+            return Ok(tagForReturn);
         }
 
         // POST api/tag
-        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TagDto tagObj)
+        public async Task<IActionResult> Post([FromBody] TagForCreationDto tag)
         {
+            Tag tagEntity = _mapper.Map<Tag>(tag);
+             
             if (!ModelState.IsValid)
                 return BadRequest();
+                       
+            await _tagRepository.AddAsync(tagEntity);
 
-            var tag = new Tag
-            {
-                Name = tagObj.Name,
-                Description = tagObj.Description
-            };
-
-            var newTag = await _tagRepository.AddAsync(tag);
-            return Ok(newTag);
+            return CreatedAtRoute("GetTag",
+                new { id = tagEntity.Id }, tagEntity);
         }
 
         // PUT api/tags/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int? id, [FromBody] TagDto tagFromUser)
+        public async Task<IActionResult> Update(int? id, [FromBody] TagForCreationDto tagFromUser)
         {
             if (id == null || !ModelState.IsValid)
                 return BadRequest();
