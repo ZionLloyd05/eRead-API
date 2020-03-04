@@ -21,7 +21,9 @@ namespace Books.API.Controllers
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _config;
 
-        public AuthController(IAuthRepository authRepository, IConfiguration config)
+        public AuthController(
+            IAuthRepository authRepository, 
+            IConfiguration config)
         {
             _authRepository = authRepository;
             _config = config;

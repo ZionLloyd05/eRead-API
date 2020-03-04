@@ -6,6 +6,18 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <UserSecretsId>c98fda34-352d-4b82-8a3f-1d580a2a36a9</UserSecretsId>
   </PropertyGroup>
+  
+   <PropertyGroup>
+    <!-- 
+    Make sure documentation XML is also included when publishing (not only when testing)
+    see https://github.com/Azure/service-fabric-issues/issues/190
+    -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\Books.API.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />

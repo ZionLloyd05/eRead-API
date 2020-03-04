@@ -2,20 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Books.ApplicationCore.Entities;
+using Books.ApplicationCore.Entities.LibraryAggregate;
 using Books.ApplicationCore.Entities.UserAggregate;
 using Books.ApplicationCore.Interfaces;
 using Books.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Books.Infrastructure.Repositories
 {
     public class UserRepository : BooksRepository<User>, IUserRepository
     {
         private readonly BooksContext _dbContext;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(BooksContext dbContext) : base(dbContext)
+        public UserRepository(BooksContext dbContext, ILoggerFactory loggerFactory) : base(dbContext)
         {
             _dbContext = dbContext;
+            _logger = loggerFactory.CreateLogger<UserRepository>();
         }
         public async Task<User> GetUserByEmail(string email)
         {
@@ -33,8 +37,25 @@ namespace Books.Infrastructure.Repositories
             if (user == null)
                 return null;
 
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+                using (var transaction = _dbContext.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _dbContext.Users.Add(user);
+                        await _dbContext.SaveChangesAsync();
+
+                        _logger.LogInformation($"User Id => {user.Id}");
+
+                        _dbContext.Libraries.Add(new Library { UserId = user.Id });
+                        await _dbContext.SaveChangesAsync();
+                        
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                    _logger.LogError($"Error : {ex.InnerException.ToString()}");
+                    }
+                }                        
 
             return user;
         }

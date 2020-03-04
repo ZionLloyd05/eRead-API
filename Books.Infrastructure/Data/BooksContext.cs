@@ -9,6 +9,10 @@ namespace Books.Infrastructure.Data
 {
     public class BooksContext : DbContext
     {
+        public BooksContext()
+        {
+
+        }
         public BooksContext(DbContextOptions<BooksContext> options) : base(options)
         {
 

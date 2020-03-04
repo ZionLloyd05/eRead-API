@@ -23,6 +23,10 @@ namespace Books.API.Controllers
             _mapper = mapper;
         }
     
+        /// <summary>
+        /// Get all categories
+        /// </summary>
+        /// <returns>All categories with id, name, description and slug fields</returns>
         // GET: api/categories
         [HttpGet]
         public async Task<IActionResult> GetCategories()
@@ -35,6 +39,11 @@ namespace Books.API.Controllers
             return Ok(categories);
         }
 
+        /// <summary>
+        /// Get a single category by it's Id
+        /// </summary>
+        /// <param name="id">The Id of the category you wish to get</param>
+        /// <returns>A category with id, name, description and slug</returns>
         // GET api/categories/5
         [HttpGet]
         [Route("{id}", Name = "GetCategory")]

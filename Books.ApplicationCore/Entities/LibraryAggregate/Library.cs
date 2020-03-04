@@ -8,7 +8,7 @@ namespace Books.ApplicationCore.Entities.LibraryAggregate
 {
     public class Library : BaseEntity, IAggregateRoot
     {
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
 
         private readonly List<LibraryItem> _libraryItems = new List<LibraryItem>();
 
