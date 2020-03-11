@@ -13,27 +13,20 @@ namespace Books.ApplicationCore.Entities.LibraryAggregate
         private readonly List<LibraryItem> _libraryItems = new List<LibraryItem>();
 
         public IReadOnlyCollection<LibraryItem> LibraryItems => _libraryItems.AsReadOnly();
-
-        public bool IsExisting(int bookId)
+        
+        public bool AddLibraryItem(int bookId)
         {
-            var existingLibraryItem = LibraryItems.FirstOrDefault(i => i.BookId == bookId);
-
-            if (existingLibraryItem != null) return true;
-
-            return false;
-        }
-
-        public void AddLibraryItem(int bookId)
-        {
-            if(!LibraryItems.Any(i => i.BookId == bookId))
+            if (!LibraryItems.Any(i => i.BookId == bookId))
             {
                 _libraryItems.Add(new LibraryItem()
                 {
                     DateAdded = DateTimeOffset.Now,
                     BookId = bookId
                 });
+                return true;
             }
-            return;
+
+            return false;
         }
 
         public void RemoveLibraryItem(int bookId)

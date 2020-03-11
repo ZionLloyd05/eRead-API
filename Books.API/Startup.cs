@@ -8,7 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Books.API.Helpers;
+using Books.API.Interfaces;
+using Books.API.Services;
 using Books.ApplicationCore.Interfaces;
+using Books.ApplicationCore.Services;
 using Books.Infrastructure;
 using Books.Infrastructure.Data;
 using Books.Infrastructure.Logging;
@@ -45,6 +48,8 @@ namespace Books.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+            services.AddScoped<ILibraryService, LibraryService>();
+            services.AddScoped<ILibraryViewModelService, LibraryViewModelService>();
 
             services.AddAutoMapper();
 

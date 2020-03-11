@@ -32,7 +32,33 @@ namespace Books.ApplicationCore.Services
                 return false;
             }
 
-            library.AddLibraryItem(bookId);
+            var result = library.AddLibraryItem(bookId);
+
+            if (!result)
+            {
+                return result;
+            }
+
+            //update library
+            await _libraryRepository.UpdateAsync(library);
+
+            return result;
+           }
+
+
+        public async Task<bool> RemoveBookFromLibrary(int libraryId, int bookId)
+        {
+            // get library
+            var library = await _libraryRepository.GetByIdAsync(libraryId);
+
+            // add item to library
+            if (library == null)
+            {
+                _logger.LogWarning($"Library was not found");
+                return false;
+            }
+
+            library.RemoveLibraryItem(bookId); 
 
             //update library
             await _libraryRepository.UpdateAsync(library);
@@ -73,11 +99,6 @@ namespace Books.ApplicationCore.Services
             _logger.LogInformation($"Library for {userId}");
 
             return count;
-        }
-
-        public Task<bool> RemoveBookFromLibrary(int libraryId, int bookId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

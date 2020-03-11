@@ -1,4 +1,5 @@
 ﻿using Books.ApplicationCore.Entities;
+using Books.ApplicationCore.Entities.LibraryAggregate;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,5 @@ namespace Books.ApplicationCore.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
         Task<int> CountAsync(ISpecification<T> spec);
-
     }
 }

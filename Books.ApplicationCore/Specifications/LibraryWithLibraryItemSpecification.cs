@@ -7,10 +7,17 @@ namespace Books.ApplicationCore.Specifications
 {
     public sealed class LibraryWithLibraryItemSpecification : BaseSpecification<Library>
     {
-        public LibraryWithLibraryItemSpecification(int?  userId)
+        public LibraryWithLibraryItemSpecification(int? libraryId)
+            : base(l => l.Id == libraryId)
+        {
+            AddInclude(l => l.LibraryItems);
+        }
+
+        public LibraryWithLibraryItemSpecification(int userId)
             : base(l => l.UserId == userId)
         {
             AddInclude(l => l.LibraryItems);
         }
+        
     }
 }

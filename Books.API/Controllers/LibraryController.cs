@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Books.API.Interfaces;
+using Books.API.ViewModels;
 using Books.ApplicationCore.Entities.LibraryAggregate;
 using Books.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -10,26 +12,70 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Books.API.Controllers
 {
-    [Route("api/[controller][action]")]
+    [Route("api/library")]
     [ApiController]
     public class LibraryController : ControllerBase
     {
-        private readonly IAsyncRepository<Library> _libraryRepository;
+        private readonly ILibraryService _libraryService;
+        private readonly ILibraryViewModelService _libraryViewModelService;
 
-        public LibraryController(IAsyncRepository<Library> libraryRepository)
+        public LibraryController(
+            ILibraryService libraryService,
+            ILibraryViewModelService libraryViewModelService
+            )
         {
-            _libraryRepository = libraryRepository;
+            _libraryService = libraryService;
+            _libraryViewModelService = libraryViewModelService;
         }
 
-        [HttpGet()]
-        // Get api/library
-        public async Task<IActionResult> MyLibrary()
+        public LibraryViewModel LibraryModel { get; set; } = new LibraryViewModel();
+
+        [HttpGet("{userId}")]
+        // Get api/library/5
+        public async Task<IActionResult> GetLibrary(int userId)
         {
+
+            await SetLibraryModelAsync(userId);
+            return Ok(LibraryModel);
+        }
+
+        [HttpPost("{userId}/{bookId}")]
+        public async Task<IActionResult> PostBook(int userId, int bookId)
+        {
+            await SetLibraryModelAsync(userId);
+
+             var isAdded = await _libraryService.AddBookToLibrary(LibraryModel.Id, bookId);
+
+            await SetLibraryModelAsync(userId);
+
+            if (!isAdded)
+            {
+                return BadRequest("Book already exist in the Library.");
+            }
+
             return Ok();
         }
 
-        [HttpPost]
+        [HttpDelete("{userId}/{bookId}")]
+        public async Task<IActionResult> DeleteBookFromLibrary(int userId, int bookId)
+        {
+            await SetLibraryModelAsync(userId);
 
+            var isRemoved= await _libraryService.RemoveBookFromLibrary(LibraryModel.Id, bookId);
 
+            await SetLibraryModelAsync(userId);
+
+            if (!isRemoved)
+            {
+                return BadRequest("Library not found.");
+            }
+
+            return Ok();
+        }
+
+        public async Task SetLibraryModelAsync(int userId)
+        {
+            LibraryModel = await _libraryViewModelService.GetOrCreateLibraryForUser(userId);
+        }
     }
 }

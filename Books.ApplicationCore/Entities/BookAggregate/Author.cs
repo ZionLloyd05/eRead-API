@@ -15,5 +15,7 @@ namespace Books.ApplicationCore.Entities.BookAggregate
         [Required]
         [MaxLength(150)]
         public string Lastname { get; set; }
+
+        public string Fullname => Lastname + " " + Firstname;
     }
 }

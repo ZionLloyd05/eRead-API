@@ -37,27 +37,33 @@ namespace Books.Infrastructure.Repositories
             if (user == null)
                 return null;
 
-                using (var transaction = _dbContext.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        _dbContext.Users.Add(user);
-                        await _dbContext.SaveChangesAsync();
+            _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync();
 
-                        _logger.LogInformation($"User Id => {user.Id}");
+            _logger.LogInformation($"User Id => {user.Id}");
 
-                        _dbContext.Libraries.Add(new Library { UserId = user.Id });
-                        await _dbContext.SaveChangesAsync();
-                        
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                    _logger.LogError($"Error : {ex.InnerException.ToString()}");
-                    }
-                }                        
 
             return user;
+
+            //using (var transaction = _dbContext.Database.BeginTransaction())
+            //{
+            //    try
+            //    {
+            //        _dbContext.Users.Add(user);
+            //        await _dbContext.SaveChangesAsync();
+
+            //        _logger.LogInformation($"User Id => {user.Id}");
+
+            //        _dbContext.Libraries.Add(new Library { UserId = user.Id });
+            //        await _dbContext.SaveChangesAsync();
+
+            //        transaction.Commit();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //    _logger.LogError($"Error : {ex.InnerException.ToString()}");
+            //    }
+            //}                        
         }
 
         public async Task<User> GetUser(int id)

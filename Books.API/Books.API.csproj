@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Books.ApplicationCore\Books.ApplicationCore.csproj" />
     <ProjectReference Include="..\Books.Infrastructure\Books.Infrastructure.csproj" />
   </ItemGroup>
 
