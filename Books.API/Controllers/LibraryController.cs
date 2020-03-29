@@ -72,7 +72,7 @@ namespace Books.API.Controllers
 
             return Ok();
         }
-
+        
         public async Task SetLibraryModelAsync(int userId)
         {
             LibraryModel = await _libraryViewModelService.GetOrCreateLibraryForUser(userId);

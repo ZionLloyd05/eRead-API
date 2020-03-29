@@ -77,19 +77,19 @@ namespace Books.API
 
             services.AddMemoryCache();
 
-            services.AddSwaggerGen(setupAction =>
-            {
-                setupAction.SwaggerDoc("LibraryOpenAPISpecification", new Microsoft.OpenApi.Models.OpenApiInfo()
-                {
-                    Title = "eRead API",
-                    Version = "1.0"
-                });
+            //services.AddSwaggerGen(setupAction =>
+            //{
+            //    setupAction.SwaggerDoc("LibraryOpenAPISpecification", new Microsoft.OpenApi.Models.OpenApiInfo()
+            //    {
+            //        Title = "eRead API",
+            //        Version = "1.0"
+            //    });
 
-                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlCommensFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+            //    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var xmlCommensFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
 
-                setupAction.IncludeXmlComments(xmlCommensFullPath);
-            });
+            //    setupAction.IncludeXmlComments(xmlCommensFullPath);
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -122,13 +122,13 @@ namespace Books.API
             }
 
             //app.UseHttpsRedirection();
-            app.UseSwagger();
-            app.UseSwaggerUI(setupAction => 
-            {
-                setupAction.SwaggerEndpoint("/swagger/LibraryOpenAPISpecification/swagger.json",
-                    "eRead API");
-                setupAction.RoutePrefix = "";
-            });
+            //app.UseSwagger();
+            //app.UseSwaggerUI(setupAction => 
+            //{
+            //    setupAction.SwaggerEndpoint("/swagger/LibraryOpenAPISpecification/swagger.json",
+            //        "eRead API");
+            //    setupAction.RoutePrefix = "";
+            //});
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();
